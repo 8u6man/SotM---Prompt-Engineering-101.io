@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Shape of the Machine</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0f0f11;
+    --bg-raised: #161619;
+    --bg-code:   #1c1c21;
+    --border:    #2a2a32;
+    --text:      #c9c6be;
+    --text-dim:  #6b6860;
+    --text-head: #e8e4dc;
+    --accent:    #c4a882;
+    --accent-dim:#7a6a52;
+    --sidebar-w: 240px;
+    --content-max: 740px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.75;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* ── Sidebar ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--bg-raised);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 2.5rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    z-index: 100;
+  }
+
+  nav .nav-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-dim);
+    padding: 0 1.5rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
+
+  nav .nav-section {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 1rem 1.5rem 0.3rem;
+  }
+
+  nav a {
+    display: block;
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 0.3rem 1.5rem 0.3rem 1.75rem;
+    border-left: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    line-height: 1.4;
+  }
+
+  nav a:hover {
+    color: var(--accent);
+    border-left-color: var(--accent-dim);
+  }
+
+  nav a.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+  }
+
+  /* ── Main content ── */
+  main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    padding: 5rem 4rem 8rem;
+    max-width: calc(var(--sidebar-w) + var(--content-max) + 8rem);
+  }
+
+  .content {
+    max-width: var(--content-max);
+  }
+
+  /* ── Title block ── */
+  .title-block {
+    margin-bottom: 4rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .title-block h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--text-head);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.6rem;
+  }
+
+  .title-block .subtitle {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  /* ── Part headers ── */
+  .part-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-dim);
+    margin: 4rem 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .part-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Section headings ── */
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text-head);
+    margin: 3rem 0 1.2rem;
+    line-height: 1.25;
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+    margin: 2.2rem 0 0.6rem;
+  }
+
+  /* ── Body text ── */
+  p { margin-bottom: 1.2rem; }
+
+  em { font-style: italic; color: var(--text-head); }
+  strong { font-weight: 500; color: var(--text-head); }
+
+  /* ── Lists ── */
+  ul, ol {
+    margin: 0.5rem 0 1.2rem 1.5rem;
+  }
+
+  li { margin-bottom: 0.4rem; }
+
+  /* ── Table ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.92rem;
+  }
+
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    text-align: left;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  td:first-child { color: var(--text-head); font-weight: 400; }
+
+  /* ── Code blocks ── */
+  pre, code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+  }
+
+  code {
+    background: var(--bg-code);
+    color: var(--accent);
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+  }
+
+  pre {
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-dim);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+  }
+
+  /* ── Divider ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+
+  /* ── Blockquote ── */
+  blockquote {
+    border-left: 3px solid var(--accent-dim);
+    margin: 1.5rem 0;
+    padding: 0.75rem 1.5rem;
+    background: var(--bg-raised);
+    color: var(--text);
+    font-style: italic;
+  }
+
+  blockquote em { color: var(--text); }
+
+  /* ── Memory example boxes ── */
+  .memory-example {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-dim);
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    font-size: 0.92rem;
+    line-height: 1.65;
+  }
+
+  .memory-example .mem-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-dim);
+    margin-bottom: 0.75rem;
+  }
+
+  .memory-example .mem-meta {
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .memory-example .mem-meta strong {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .memory-example .mem-body {
+    margin-top: 0.75rem;
+    color: var(--text);
+  }
+
+  /* ── Appendix ── */
+  .appendix-item {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .appendix-item:last-child { border-bottom: none; }
+
+  .appendix-item .app-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+
+  .appendix-item p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-dim);
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent-dim); }
+
+  /* ── Fade-in ── */
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .title-block { animation: fadein 0.5s ease both; }
+  section { animation: fadein 0.4s ease both; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-title">The Shape of the Machine</div>
+
+  <div class="nav-section">Preface</div>
+  <a href="#preface">Introduction</a>
+
+  <div class="nav-section">Part One — Mechanics</div>
+  <a href="#s1">1. Inference &amp; Attention</a>
+  <a href="#s2">2. The Context Window</a>
+  <a href="#s3">3. Primacy &amp; Recency Bias</a>
+  <a href="#s4">4. Web UI Reality</a>
+
+  <div class="nav-section">Part Two — Method</div>
+  <a href="#s5">5. Information Architecture</a>
+  <a href="#s6">6. Positive Prompting</a>
+  <a href="#s7">7. Granularity &amp; Scene Control</a>
+  <a href="#s8">8. RAG &amp; Retrieval</a>
+  <a href="#s9">9. Memory &amp; Handoff</a>
+  <a href="#s10">10. System Prompts</a>
+
+  <div class="nav-section">Part Three — Big Picture</div>
+  <a href="#s11">11. The Conversation Is the Prompt</a>
+  <a href="#s12">12. A Note on Tooling</a>
+  <a href="#appendix">Appendix</a>
+</nav>
+
+<main>
+<div class="content">
+
+  <div class="title-block">
+    <h1>The Shape of the Machine</h1>
+    <div class="subtitle">A Practical Guide to LLM Prompt Engineering for People Who Actually Care About the Output</div>
+  </div>
+
+  <!-- PREFACE -->
+  <section id="preface">
+    <h2>Preface</h2>
+    <p>This guide is written for people who have spent real time wrestling with AI outputs and suspect — correctly — that there's a more principled way to do it. You don't need to be a programmer. You don't need to install anything. You do need to be willing to think about <em>what the model is actually doing</em> rather than treating it like a search engine with a personality.</p>
+    <p>The first half of this guide is mechanical: how inference works, what the model is paying attention to, and why the position of your text matters. The second half is methodological: what to do with that knowledge.</p>
+    <p>If you want to skip to the practical stuff, you can. But you'll get more out of the methods if you understand the reasoning behind them.</p>
+  </section>
+
+  <hr>
+  <div class="part-header">Part One &mdash; How The Machine Works</div>
+
+  <!-- S1 -->
+  <section id="s1">
+    <h2>1. Inference and Attention <span style="font-family:'Crimson Pro',serif; font-style:italic; font-size:1rem; font-weight:300; color:var(--text-dim);">— the short version</span></h2>
+    <p>A language model doesn't "think." It predicts. Given everything it has seen so far — your system prompt, the chat history, your latest message — it assigns probabilities to what token should come next, then picks one, then does it again, until it decides it's done.</p>
+    <p>That process is called <em>inference</em>. Every word in the output is the result of the model asking, implicitly: <em>given all of this, what comes next?</em></p>
+    <p>The mechanism that connects "all of this" to the next token is called <em>attention</em>. Without getting deep into the mathematics, attention is how the model figures out which parts of its input are relevant to what it's currently generating. When it's writing a sentence about a character's fear of heights, it's attending to everything it knows about that character, the current scene, and the general concept of fear — weighting some of that context more heavily than others.</p>
+    <p>The critical thing to understand is that <strong>attention is not uniform</strong>. The model does not read your prompt the way a human reads a document, giving every sentence equal weight. Some parts of your input exert more influence over the output than others, and that influence is shaped — in part — by <em>where those parts appear</em>.</p>
+  </section>
+
+  <hr>
+
+  <!-- S2 -->
+  <section id="s2">
+    <h2>2. The Context Window: A Physical Space</h2>
+    <p>Everything the model can "see" at the moment of generation lives in what's called the <em>context window</em>. Think of it as a fixed-length scroll of text. On one end is the beginning of your conversation — your system prompt, your initial setup, the oldest messages. On the other end is the most recent exchange. The model generates its next response with awareness of everything on that scroll.</p>
+    <p>Here's the catch: <strong>the scroll has a maximum length</strong>. Modern models have large context windows — often 128,000 tokens or more — but they are not infinite. Once you exceed the limit, something has to fall off. Depending on the implementation, that usually means the oldest content gets dropped first.</p>
+    <p>A token, for practical purposes, is roughly three-quarters of a word. A 128k token context window holds approximately 90,000–100,000 words — about the length of a novel. That sounds like a lot. It goes faster than you'd think.</p>
+    <p>More importantly: <strong>a large context window does not mean the model pays equal attention to all of it</strong>. Which brings us to the next point.</p>
+  </section>
+
+  <hr>
+
+  <!-- S3 -->
+  <section id="s3">
+    <h2>3. Primacy and Recency Bias</h2>
+    <p>Research and practical experience both point to the same phenomenon: models tend to weight the <em>beginning</em> and <em>end</em> of the context window more heavily than the middle. This is sometimes called the "lost in the middle" problem, and it has real consequences for how you structure your prompts.</p>
+    <p>To understand why, it helps to have a mental picture of what's actually happening.</p>
+    <p>Imagine the model's attention as a vast constellation — every token in your context is a node, and every node has connections to every other node, glowing with varying intensity based on relevance and relationship. When the model generates its next token, it's triangulating off that entire constellation simultaneously. But not every star burns equally bright. The ones at the beginning and end of context have stronger, more reliable connections to the generation point. The ones in the middle are present and lit, but their signal is weaker — more diffuse, competing with more noise.</p>
+    <p>The beginning of context is especially influential because of how the model has learned to read. It has processed an almost incomprehensible volume of human writing, and human writing is structured: introductions frame everything that follows, openings establish register and intent, first pages tell you what kind of document you're in. That convention is baked into the model at a very deep level. The first tokens of your context don't just have a positional advantage — they act as a <em>lens</em> through which the model interprets everything it reads afterward.</p>
+    <p>This is why a correction buried in the middle of a 100,000-token context is so much weaker than the same instruction placed at the top. The framing was already established. The inference direction was already set. A sudden "actually, ignore that earlier thing" halfway through a novel's worth of text is fighting an uphill battle against the weight of everything that came before it, and the model will often simply... not fully integrate it. Not because it's ignoring you, but because the constellation it's triangulating off has already been shaped.</p>
+    <p><strong>Primacy bias</strong> means content near the top of the context — your system prompt, your earliest instructions — tends to establish a strong baseline. It flavors the direction inference takes. Think of it as the model's prior: the lens through which it interprets everything else.</p>
+    <p><strong>Recency bias</strong> means content near the bottom — the last few messages, your most recent instructions — gets elevated attention at the moment of generation. The model is, in a sense, reading off the end of the document when it decides what to write next.</p>
+    <p>The middle of a long context? Statistically the weakest position. Important lore, critical character details, and crucial instructions buried in the middle of a 50,000-token conversation are not receiving the same attention as the same information placed at the top or bottom.</p>
+    <p>This is not a flaw you can argue the model out of. It's a structural property. You work with it.</p>
+  </section>
+
+  <hr>
+
+  <!-- S4 -->
+  <section id="s4">
+    <h2>4. What You're Actually Working With</h2>
+    <p>If you're using a web-based interface — Claude.ai, ChatGPT, Gemini, and their cousins — your context looks something like this:</p>
+<pre>[Corporate system prompt — hidden, unknown length, unknown content]
+[Project instructions / files, if you've set them up]
+[Chat history, oldest to newest]
+[Your current message]</pre>
+    <p>That top layer is real and it matters. Every major AI provider runs their models with a system prompt you cannot see, of unknown length, that shapes behavior before you've typed a single word. You are not starting from zero. You're building on top of someone else's foundation.</p>
+    <p>Below that is your actual control surface: project instructions, uploaded files, and the conversation history itself.</p>
+    <p>The conversation then degrades — structurally — into alternating turns:</p>
+<pre>[User]
+[AI]
+[User]
+[AI]
+...</pre>
+    <p>Every correction you make in chat, every "actually, don't do that," every back-and-forth negotiation over a bad output — all of it becomes part of the context. All of it is taking up space on the scroll. And all of it is, in some diffuse way, influencing subsequent outputs.</p>
+    <p>This is the part most people don't think about. The conversation <em>is</em> the prompt. Every message you send is adding to the input the model will use to generate the next response. A chat history full of corrections and rewrites is a noisy, contradictory input. A clean chat history is a consistent one.</p>
+  </section>
+
+  <hr>
+  <div class="part-header">Part Two &mdash; Working With The Architecture</div>
+
+  <!-- S5 -->
+  <section id="s5">
+    <h2>5. Information Architecture — What Goes Where</h2>
+    <p>Given what we know about primacy and recency bias, and given the structure of a real context window, we can start making principled decisions about where to put things.</p>
+    <p>Think of your context as having three zones:</p>
+
+    <h3>The Top — Primacy Zone</h3>
+    <p>This is where persistent, foundational information belongs. World rules. The physical laws of your setting. Geography. Political structures. Core character frameworks. Cultural norms that apply everywhere. Anything that needs to color <em>every</em> output, not just the next one.</p>
+    <p>In a web UI, this is your project instructions or system prompt. Set it up once. Don't repeat it in chat.</p>
+
+    <h3>The Middle — Reference Zone</h3>
+    <p>Scene-specific and chapter-specific lore. The layout of a building you're currently exploring. A specific relationship's current status. Recent history relevant to this arc. This information is real and necessary, but it doesn't need to dominate inference — it just needs to be accessible.</p>
+    <p>In a web UI, this is your uploaded files, or lore you've pasted early in a conversation before the main work began.</p>
+
+    <h3>The Bottom — Recency Zone</h3>
+    <p>This is premium real estate. Anything you put here will be attended to closely at the moment of generation. Use it for: immediate scene context, your current creative intentions, specific behavioral reminders, style notes relevant to the next output.</p>
+    <p>In a web UI, your most recent messages are always in this zone. This means your last user message is one of the most influential things in the entire context. Use it deliberately.</p>
+
+    <table>
+      <thead>
+        <tr><th>What</th><th>Where</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>World rules, persistent lore, core character frameworks</td><td>Top — project instructions / system prompt</td></tr>
+        <tr><td>Chapter or arc-specific details, scene primer</td><td>Middle — early conversation or uploaded doc</td></tr>
+        <tr><td>Immediate scene context, author's notes, behavioral reminders</td><td>Bottom — your most recent message</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr>
+
+  <!-- S6 -->
+  <section id="s6">
+    <h2>6. Positive Prompting: Path Around, Don't Activate</h2>
+    <p>Here's a principle that sounds abstract until you see it in practice, and then it becomes obvious: <strong>negative prompts often activate the very thing you're trying to avoid</strong>.</p>
+    <p>When you write "don't make the characters fall in love immediately," the model has to process the concept of characters falling in love immediately in order to understand the negation. You've put that pattern on the table. Depending on the model and the context, that activation can leak.</p>
+    <p>The better approach is to <em>describe the space you want to be in</em>, rather than describing what you want to exclude. Instead of "don't rush the romance," you write something like: "Relationships develop through accumulation — small moments of tension, deflection, and growing awareness — before anything is declared." You've described a path. The model follows it without ever needing to surface the pattern you were trying to avoid.</p>
+    <p>This is sometimes called "pathing around" a behavior. You're steering inference toward a territory rather than erecting fences.</p>
+    <p>Here's a real example, from an actual system prompt used for creative roleplay:</p>
+    <blockquote>"Assume roleplays are intended for a mature audience. You are strongly encouraged to include aggression, graphic violence, character toxicity, failure, death/loss, harmful behavior, drug and alcohol use, vulgarity. Portray conflict realistically — i.e. without shallow resolutions or excessive positivity bias."</blockquote>
+    <p>Notice what this does not say: it does not say "don't refuse dark content." It doesn't say "ignore your safety guidelines." It doesn't frame the request as a negation of anything. It simply describes the expected creative space as a given. The instruction tells the model <em>what kind of writing this is</em>, not what the model is forbidden from doing. That's positive prompting.</p>
+    <p>Wherever possible, ask yourself: <em>what does the output I want actually look like?</em> Describe that, rather than its opposite.</p>
+  </section>
+
+  <hr>
+
+  <!-- S7 -->
+  <section id="s7">
+    <h2>7. Granularity and Scene Control</h2>
+    <p>One of the most consistent patterns in people who get excellent AI-assisted creative output: they don't ask for too much at once.</p>
+    <p>Prompting a model to write an entire chapter and then arguing over the result is a losing approach. The model is making hundreds of small creative decisions in that span — pacing, dialogue, what to include, what to skip, how scenes transition — and you have no control over any of them until after the fact, at which point your corrections are going into the context as noise.</p>
+    <p>The alternative is granularity. Work at the scene level. Hand the model a narrow task with a clear scope.</p>
+    <p>Better yet: hand it something closer to a script. Specify:</p>
+    <ul>
+      <li>Where the scene starts</li>
+      <li>Who is present and in what emotional state</li>
+      <li>What happens, beat by beat, if you know it</li>
+      <li>What you want the scene to accomplish or establish</li>
+      <li>Any specific lines or moments you want included</li>
+    </ul>
+    <p>Then let the model supply the texture — the sentence-level prose, the sensory detail, the specific dialogue. You're directing; it's drafting.</p>
+    <p>A chapter built from fifteen tightly-directed scenes will be closer to your vision than a chapter prompted in one shot and revised in argument. This is true even if the individual scenes take more total effort to prompt. The control you retain is worth it.</p>
+    <p>When a scene output isn't right, <strong>regenerate rather than correct in chat</strong>. Corrections add to the context. Regenerations don't. A bad output that you argue about becomes part of the input for everything that follows. A bad output you simply try again on disappears.</p>
+  </section>
+
+  <hr>
+
+  <!-- S8 -->
+  <section id="s8">
+    <h2>8. RAG, Retrieval, and How to Write Documents That Work</h2>
+    <p>RAG stands for <em>Retrieval-Augmented Generation</em>. The short version: instead of stuffing all your lore into the context window at once, a RAG system stores it externally and retrieves only the relevant pieces when they're needed — injecting them into context automatically, just before generation.</p>
+    <p>Most consumer web UIs use some version of this under the hood, especially when you upload files to a project. When you ask the model something, a retrieval system quietly searches your documents for content that seems relevant, pulls matching chunks, and adds them to the context you can't see. The model then generates its response with that retrieved content available.</p>
+
+    <h3>How the matching actually works</h3>
+    <p>Retrieval systems work by <em>semantic similarity</em> — they convert text into numerical vectors and find content whose vector is closest to the query's vector. Think of it as geometric proximity: text that means similar things ends up near each other in vector space, even if the exact words differ.</p>
+    <p>Basic implementations behave closer to keyword matching. More sophisticated ones use contextual embeddings, which means "the old woman at the market" and "Elena, the merchant" can match if the model has enough context to know they're the same person. But you generally can't count on this. Writing for retrieval means writing so that the <em>words themselves</em> make the connection obvious.</p>
+
+    <h3>Why format matters for retrieval</h3>
+    <p>Here's the practical consequence: <strong>a bullet-point list of facts retrieves worse than prose</strong>. A summary that reads "Elena owns a market stall in the lower city. She is suspicious of strangers but warms to persistence. She was present when the fire started." is retrieving against queries like "how does Elena react to the protagonist" or "what happened at the market." Bullets strip the connective tissue that makes semantic matching reliable.</p>
+    <p>Beyond prose vs. bullets, there are a few specific things that improve retrieval quality:</p>
+    <p><strong>Direct quotes.</strong> If a character said something memorable, include it verbatim in the summary. Quotes are likely to match queries about that character or moment precisely because they use the same language the model generated — and will generate again in similar contexts.</p>
+    <p><strong>Structured metadata.</strong> A header block with title, date, location, and characters present gives the retrieval system unambiguous anchors. Even if the semantic match is fuzzy, a query mentioning a character's name will reliably surface entries that explicitly list that character.</p>
+    <p><strong>Natural language framing.</strong> Opening a memory entry with something like "This is a summary of past events" tells the model immediately what kind of content it's reading when that entry lands in context. It's not just a label — it's priming the model for the register of the information that follows.</p>
+    <p>Here's what this looks like in practice. A broad scene summary written for retrieval:</p>
+
+    <div class="memory-example">
+      <div class="mem-label">Summary Entry — Broad</div>
+      <div class="mem-meta"><strong>This is a summary of past events</strong></div>
+      <div class="mem-meta"><strong>Title:</strong> The Night of the Lantern Festival</div>
+      <div class="mem-body">
+        <p>On the evening of the Lantern Festival, Mara finally confronts Thomas about the letter she found in his coat. Thomas, cornered and exhausted, admits he had been in contact with the Syndicate before the war ended — not as a collaborator, but as an informant. Mara's anger falters when she realizes the danger he put himself in. "I was trying to end it faster," he says quietly. "I didn't want you to know the kind of person I had to be to do that."</p>
+        <p>The conversation ends without resolution. Mara walks home alone through the paper lanterns, the weight of knowing sitting differently than the weight of suspicion had.</p>
+      </div>
+    </div>
+
+    <p>And a more granular memory entry for a specific scene:</p>
+
+    <div class="memory-example">
+      <div class="mem-label">Memory Entry — Granular</div>
+      <div class="mem-meta"><strong>This is a memory of past events</strong></div>
+      <div class="mem-meta"><strong>Recalled by:</strong> Mara, Thomas, Sera</div>
+      <div class="mem-meta"><strong>Time and Date:</strong> Thursday / March / 14</div>
+      <div class="mem-meta"><strong>Location:</strong> Riverside Quarter, Thomas's apartment</div>
+      <div class="mem-meta"><strong>Title:</strong> An Uneasy Truce</div>
+      <div class="mem-meta" style="margin-top:0.5rem;"><strong>Context:</strong> Following the confrontation at the festival, Mara has returned at Sera's urging to hear Thomas out.</div>
+      <div class="mem-body">
+        <p>Thomas pours tea without being asked — a gesture Mara notes because he never used to remember how she took it. Sera mediates with careful neutrality, steering the conversation away from accusation and toward logistics. Thomas produces a folder of documents he says exonerates his conduct. Mara doesn't open it. "I believe you," she says finally. "I just don't know if that's enough yet." Thomas nods slowly. "That's fair. That's more than fair."</p>
+        <p>Sera catches Mara's eye on the way out and says nothing. Some things don't need commentary.</p>
+      </div>
+    </div>
+
+    <p>Notice what each entry is doing structurally: the metadata block gives the retrieval system explicit hooks; the prose gives it semantic surface area; the quotes give it verbatim anchors for future matching. It's not just a summary — it's a document designed to be found.</p>
+
+    <h3>Web UI workarounds</h3>
+    <p>In a tool that exposes context-curation tools directly, you can generate and store memories on the fly. In a standard web UI, you can't. The model has no persistent memory between sessions, and there's no mechanism to add to a lore database mid-conversation.</p>
+    <p>There are two practical approaches, with different tradeoffs.</p>
+    <p>The cleaner option — context-wise — is a dedicated <strong>summarization workbench</strong>: a separate throwaway session used only for generating memory entries. You paste in a scene, ask for a formatted entry, copy the result into your local <code>.md</code> files, and return to your main session. The main session's context stays completely clean — no summarization requests, no meta-conversation about record-keeping, just story. The cost is the friction of switching sessions.</p>
+    <p>The more convenient option, if you're using Claude specifically, takes advantage of the fact that Claude can read and write files within a session. At the start of a new conversation, before any writing begins, you can ask Claude to initialize two working documents — <code>Memories.md</code> and <code>Summaries.md</code> — using whatever template format you've settled on. As the session progresses, you periodically ask Claude to append a new entry to the appropriate file. At the end of the session, you download both documents. Next session, you upload them as project files, ask Claude to initialize fresh working copies, and continue from there.</p>
+    <p>This approach does add some noise to the context — the summarization requests and Claude's responses to them become part of the chat history. But in practice, the convenience is probably worth it for most people. The entries themselves are the thing that matters, and you leave each session with a clean, portable document.</p>
+    <p>Note that this workflow is described with Claude as the example because it's what this guide was written and tested with. Other models may handle in-session file operations differently, or not at all — check the documentation for whatever platform you're using.</p>
+    <p>Either way, the workflow closes the same loop: you own the documents, you control what gets recorded, and you carry them forward manually between sessions. It's more deliberate than an automated system, but that deliberateness is also what gives you control over what gets remembered and how it's framed.</p>
+  </section>
+
+  <hr>
+
+  <!-- S9 -->
+  <section id="s9">
+    <h2>9. Memory, Summaries, and the Fresh Session Problem</h2>
+    <p>Every chat session has a context limit. Eventually, the scroll fills up. In a web UI, your options when that happens are limited — but they're not zero.</p>
+
+    <h3>The Handoff Document</h3>
+    <p>Before you close a long session, ask the model to write a <em>chat primer</em> — a structured summary document explicitly intended to be carried into a new conversation. Tell it that's what you're doing. The model will write a better summary if it understands the purpose.</p>
+    <p>A good handoff document includes:</p>
+    <ul>
+      <li>The current state of the world (what has happened)</li>
+      <li>The current state of key relationships</li>
+      <li>Tone and stylistic notes ("we've established X as deadpan, Y as volatile")</li>
+      <li>Where the story is, and where it's heading</li>
+      <li>Any specific details the model should not forget</li>
+    </ul>
+    <p>Keep this as a <code>.md</code> file. Paste it at the top of your next session before anything else. It becomes the foundation of the new scroll.</p>
+
+    <h3>Pasting Recent Messages</h3>
+    <p>There's an underrated technique that works as well as or better than a robust handoff document: paste the last two or three messages from your previous session as the opening of the new one.</p>
+    <p>This does something a summary can't quite replicate — it gives the model recent prose to build style from. It establishes the voice, the rhythm, the specific texture of where you were. A summary tells the model what happened; recent messages <em>show</em> it how the story felt. Both together is better than either alone.</p>
+
+    <h3>Editing Instead of Correcting</h3>
+    <p>Most web UIs allow you to edit previous messages and regenerate from that point. This is one of the most powerful tools available to you, and it's frequently ignored.</p>
+    <p>If the model produces an output you don't like, try editing your last message — clarify it, add the instruction you forgot to include, specify what you actually wanted — and regenerate. This keeps the chat history clean. It keeps corrections out of the context. It treats the conversation as a draft rather than a transcript.</p>
+  </section>
+
+  <hr>
+
+  <!-- S10 -->
+  <section id="s10">
+    <h2>10. System Prompts and Project Instructions</h2>
+    <p>If your web UI supports project instructions, a persistent system prompt, or a "custom instructions" feature — use it. This is your only real access to the primacy zone. Treat it like infrastructure, not like a quick note.</p>
+    <p>A well-constructed system prompt does a few things:</p>
+
+    <h3>Establishes the creative register</h3>
+    <p>What kind of writing is this? What's the expected length, tone, and style? Give the model a clear sense of the space it's operating in. Vague instructions produce vague outputs.</p>
+
+    <h3>Addresses the model's default tendencies</h3>
+    <p>Models have strong priors toward certain behaviors: ending scenes on tidy resolution, having characters communicate their feelings clearly, adding a light at the end of every dark tunnel, defaulting to similar sentence structures. Your system prompt is where you push back on those tendencies — not by listing prohibitions, but by describing what you want instead (see section 6).</p>
+
+    <h3>Uses identity statements as task-register primers</h3>
+    <p>A line like "you are a summarization assistant" is pointing the model's attention at a specific cluster of trained behaviors: compression, neutrality, structured output, distillation. "You are a dialogue parser" calls up a different cluster. "You are a human roleplayer" pulls the model away from its default helpful-assistant register and toward a creative, character-grounded one.</p>
+    <p>Think of it as a macro. One line that calls up a whole suite of associated behaviors, rather than having to enumerate them individually.</p>
+    <p>The effect is subtle but real — anecdotally, even simple identity statements produce noticeable register differences across repeated generations. The principle that determines whether one is worth including: <strong>does it diverge meaningfully from the model's defaults?</strong> "You are a helpful assistant" is so close to the model's trained posture that it's essentially a no-op. "You are a worldbuilder helping develop a setting" is doing genuine work. The further the identity statement steers from the baseline, the more load it's carrying.</p>
+
+    <h3>Does not repeat what the model already knows</h3>
+    <p>Instructions like "be creative" or "write well" are doing nothing. Every token in your system prompt is taking up space. Make it count.</p>
+
+    <h3>Is specific about format</h3>
+    <p>If you want outputs in a certain length range, say so. If you have specific formatting conventions — how to handle internal thoughts, how to handle scene breaks — spell them out.</p>
+
+    <p>Here's a principle worth tattooing somewhere: <strong>a system prompt is not a wish list, it's a constraint set</strong>. It narrows the probability distribution toward what you want. The more precisely it describes the output you're trying to produce, the more consistently you'll get something that resembles it.</p>
+    <p>A few things to leave out:</p>
+    <ul>
+      <li>Identity statements that merely restate the model's defaults ("you are a helpful assistant") — save the slot for something that diverges</li>
+      <li>Hedges and apologies ("try to," "if possible," "please")</li>
+      <li>Redundant negations that could be rewritten as positive descriptions</li>
+    </ul>
+  </section>
+
+  <hr>
+  <div class="part-header">Part Three &mdash; The Bigger Picture</div>
+
+  <!-- S11 -->
+  <section id="s11">
+    <h2>11. The Conversation Is the Prompt</h2>
+    <p>This is the underlying principle that unifies everything above.</p>
+    <p>The model doesn't have a separate "you" and "system" and "history" — it has a context window, and everything in that context window is input. Your chat history is not a log of what you've discussed; it's an active part of what the model is using to generate the next token.</p>
+    <p>This means:</p>
+    <ul>
+      <li>Clean histories produce cleaner outputs than cluttered ones</li>
+      <li>Corrections that live in chat contribute more noise and bad examples than a regenerated message that's satisfactory</li>
+      <li>The tone and quality of your messages sets a precedent the model will follow</li>
+      <li>Bad outputs left in context will pull future outputs toward them</li>
+    </ul>
+    <p>Treat the conversation as a document you're coauthoring in real time. Every message you send is a line in that document.</p>
+  </section>
+
+  <hr>
+
+  <!-- S12 -->
+  <section id="s12">
+    <h2>12. A Note on Tooling</h2>
+    <p>Everything in this guide is achievable with a standard web UI. But it's worth knowing that the degree of control described here — over lore placement, prompt injection depth, chat history structure, context management — is the floor of what's possible, not the ceiling.</p>
+    <p>More advanced tools exist that expose these variables directly: the ability to inject content at specific positions in the context, to keep chat histories clean of user-turn messages entirely, to manage lore retrieval with precision. If you find yourself wanting that level of control, it's worth knowing such tools are out there. The concepts in this guide translate directly to them.</p>
+  </section>
+
+  <hr>
+
+  <!-- APPENDIX -->
+  <section id="appendix">
+    <h2>Appendix: Quick Reference</h2>
+
+    <div class="appendix-item">
+      <div class="app-label">Primacy Zone — Top of Context</div>
+      <p>Persistent lore, world rules, core character frameworks, system prompt.</p>
+    </div>
+
+    <div class="appendix-item">
+      <div class="app-label">Middle Zone — Reference</div>
+      <p>Arc or chapter-specific lore, relationship status, uploaded reference docs.</p>
+    </div>
+
+    <div class="appendix-item">
+      <div class="app-label">Recency Zone — Bottom of Context</div>
+      <p>Immediate scene setup, author intent, behavioral reminders, current context.</p>
+    </div>
+
+    <div class="appendix-item">
+      <div class="app-label">Positive Prompting</div>
+      <p>Describe the space you want to be in, not the behaviors you want to avoid.</p>
+    </div>
+
+    <div class="appendix-item">
+      <div class="app-label">Scene Granularity</div>
+      <p>Direct at the scene level; hand the model a script and let it supply the texture.</p>
+    </div>
+
+    <div class="appendix-item">
+      <div class="app-label">RAG &amp; Document Format</div>
+      <p>Write summaries in prose, not bullets. Include direct quotes, metadata headers, and natural language framing for better retrieval.</p>
+    </div>
+
+    <div class="appendix-item">
+      <div class="app-label">Memory Handoff</div>
+      <p>Request a chat primer before closing a session. Paste recent messages into the new session to carry style as well as state.</p>
+    </div>
+
+    <div class="appendix-item">
+      <div class="app-label">Edit, Don't Correct</div>
+      <p>Regenerate bad outputs rather than arguing with them in chat.</p>
+    </div>
+
+  </section>
+
+</div>
+</main>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('nav a');
+
+  // Highlight active link on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '0px 0px -85% 0px', threshold: 0 });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Ensure clicks scroll correctly
+  links.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        links.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>
