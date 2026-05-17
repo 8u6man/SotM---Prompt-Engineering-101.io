@@ -517,7 +517,7 @@
   <!-- S8 -->
   <section id="s8">
     <h2>8. RAG, Retrieval, and How to Write Documents That Work</h2>
-    <p>RAG stands for <em>Retrieval-Augmented Generation</em>. he short version: instead of stuffing all your lore into the context window at once, a RAG system stores it externally and retrieves only the relevant pieces when they're needed — injecting them into context automatically, just before generation.</p>
+    <p>RAG stands for <em>Retrieval-Augmented Generation</em>. The short version: instead of stuffing all your lore into the context window at once, a RAG system stores it externally and retrieves only the relevant pieces when they're needed — injecting them into context automatically, just before generation.</p>
     <p>The term covers a spectrum of implementations. At the basic end, retrieval is just keyword matching — if your query contains "Elena," pull any entry tagged with that name. This is how many dedicated creative writing tools handle lore retrieval by default. At the more sophisticated end, retrieval uses *vector embeddings*: text is converted into numerical representations, and the system finds stored content that's geometrically closest to the query. Most consumer web UIs that support file uploads are doing something closer to this when they search your project documents.</p>
 
     <h3>How the matching actually works</h3>
